@@ -4,9 +4,9 @@ import math
 
 Turtles = []
 TurtleQueues = []
-turtle.delay(0)
-# turtle.delay(1)
-for i in range(3):
+turtle.delay(1)
+TurtleCount = 3
+for i in range(TurtleCount):
     NewTurtle = turtle.Turtle()
     NewTurtle.shape("turtle")
     NewTurtle.speed(0)
@@ -27,7 +27,7 @@ MinuteAngle = 0
 SecondAngle = 0
 
 #Since I know some people will eventually read this code, here is how the Queues work.
-#Each turtle has its own queue of instructions, which are handled as strings.
+#Each turtle has its own queue of instructions, which is handled as an array strings.
 #Every instruction starts with a letter which notates the action of the instruction,
 #and it is usually followed by a value. The value is whatever the turtle function that the action calls needs.
 #
@@ -42,10 +42,10 @@ SecondAngle = 0
 # S = pensize
 # * = Sync => waits until all turtles have a * instruction. Value can be used as a debug comment to know where a sync instruction came in case of freezes. I used this by halting the program with ctrl+c and then lookign at the variables with thonny to see which one had a * left and where it was form.
 #
-# To draw with all the turtles simultanously, fill up their queues by appending and then call ReadTurtleQueues
+# To draw with all the turtles simultaneously, fill up their queues by appending and then call ReadTurtleQueues
 def ReadTurtleQueues(MaxStep = 5):
     while bool(TurtleQueues[0]) or bool(TurtleQueues[1]) or bool(TurtleQueues[2]):
-        for i in range(3):
+        for i in range(TurtleCount):
             if bool(TurtleQueues[i]):
                 Action = TurtleQueues[i][0][0:1]
                 Amount = TurtleQueues[i][0][1:]
@@ -57,11 +57,12 @@ def ReadTurtleQueues(MaxStep = 5):
                     else:
                         TurtleQueues[i].pop(0)
                 elif Action == "*": #Sync!
-                    if(i == 2): #Are we on the last turtle, so that if we pop the sync orders now no turtle will be left out of sync
-                        if(TurtleQueues[0][0][0:1] == "*" and TurtleQueues[1][0][0:1] == "*"): #Other turtles synced too?
-                            TurtleQueues[0].pop(0)
-                            TurtleQueues[1].pop(0)
-                            TurtleQueues[2].pop(0)
+                    AllTurtlesSynced=True
+                    for i2 in range(TurtleCount):
+                        AllTurtlesSynced = AllTurtlesSynced and TurtleQueues[i2][0][0:1] == "*"
+                    if AllTurtlesSynced:
+                        for i2 in range(TurtleCount):
+                            TurtleQueues[i2].pop(0)
                 else:
                         TurtleQueues[i].pop(0)
                 
@@ -83,7 +84,6 @@ def ReadTurtleQueues(MaxStep = 5):
                     Turtles[i].pensize(float(Amount))
                 elif(Action == "*"):
                     continue
-                    # * = Syncpoint. Wait until every turtle has one.
 
 def DrawClock():
     #Rotate the turtles to face their correct starting orientations
