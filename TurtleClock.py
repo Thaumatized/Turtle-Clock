@@ -66,6 +66,7 @@ def ReadTurtleQueues(MaxStep = 5):
                 else:
                         TurtleQueues[i].pop(0)
                 
+                # I know this is just the sort of place where you could use match; However since this is python it really doesn't matter. In other languages I would do it just for cleanliness.
                 if(Action == "F"):
                     Turtles[i].forward(Amount)
                 elif(Action == "R"):
@@ -84,6 +85,7 @@ def ReadTurtleQueues(MaxStep = 5):
                     Turtles[i].pensize(float(Amount))
                 elif(Action == "*"):
                     continue
+                    # * = Syncpoint. Wait until every turtle has one.
 
 def DrawClock():
     #Rotate the turtles to face their correct starting orientations
@@ -295,15 +297,13 @@ while True:
     Second = CurrentTime[5]
     
     # When the minute arm turns to these numbers, redraw the clock because turtle gets laggy otherwise.
-    # RefreshMinutes = [0, 15, 30 ,45]
+    # I suspect that turtle keeps information about old lines.
+    RefreshMinutes = range(0, 60, 5); #Every 5 minutes
     
-    if Minute != OldMinute and Minute % 5 == 0:
-    # for i in RefreshMinutes:
-        # if(Minute == i and OldMinute != Minute):
-            turtle.delay(0)
-            InitClock()
-            turtle.delay(10)
-            # break
+    if Minute != OldMinute and Minute in RefreshMinutes:
+        turtle.delay(0)
+        InitClock()
+        turtle.delay(10)
     
     RefreshClock()
 
