@@ -303,6 +303,10 @@ while True:
         turtle.delay(10)
 
     CurrentTime = time.localtime()
+    if Second == CurrentTime[5]:
+        time.sleep(time.time() - int(time.time()))
+        CurrentTime = time.localtime()
+
     Hour = CurrentTime[3]
     Minute = CurrentTime[4]
     Second = CurrentTime[5]
