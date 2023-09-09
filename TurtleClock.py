@@ -66,7 +66,7 @@ def ReadTurtleQueues(MaxStep = 5):
                 else:
                         TurtleQueues[i].pop(0)
                 
-                # I know this is just the sort of place where you could use match; However since this is python it really doesn't matter. In other languages I would do it just for cleanliness.
+                # I know this is just the sort of place where you could use match; However since this is python it really doesn't matter. In other languages I would do it just for cleanliness, but for python I am totally ready to spend more time writing a comment which is frankly useless about than actually do it.
                 if(Action == "F"):
                     Turtles[i].forward(Amount)
                 elif(Action == "R"):
@@ -95,17 +95,18 @@ def DrawClock():
     
     #Start of drawing the clock
     for i in range(3):
+
         TurtleQueues[i].append("* Start of DrawClock()")
         TurtleQueues[i].append("S15")
-        TurtleQueues[i].append("F300")
+        TurtleQueues[i].append("F" + str(Radius))
         TurtleQueues[i].append("R90")
 
-        Radius = 600*math.pi
+        Circumference = Radius*2*math.pi
         Steps = 720
-        MySteps = 240
+        MySteps = int(Steps/3)
 
         StepAngle = 360/Steps
-        StepLength = Radius/Steps
+        StepLength = Circumference/Steps
         
         TurtleQueues[i].append("D")
 
@@ -118,7 +119,7 @@ def DrawClock():
         
         TurtleQueues[i].append("U")
         TurtleQueues[i].append("R90")
-        TurtleQueues[i].append("F300")
+        TurtleQueues[i].append("F" + str(Radius))
 
         #Little lines to indicate minutes/hours
         for j in range(20):
@@ -126,12 +127,12 @@ def DrawClock():
                 TurtleQueues[i].append("S5") # Hours
             else:
                 TurtleQueues[i].append("S1") # Minutes
-            TurtleQueues[i].append("F270")
+            TurtleQueues[i].append("F" + str(Radius*0.9))
             TurtleQueues[i].append("D")
-            TurtleQueues[i].append("F20")
+            TurtleQueues[i].append("F" + str(Radius*0.05))
             TurtleQueues[i].append("U")
             TurtleQueues[i].append("R180")
-            TurtleQueues[i].append("F290")
+            TurtleQueues[i].append("F" + str(Radius*0.95))
             TurtleQueues[i].append("R6")
             
         TurtleQueues[i].append("L" + str(60 + (i * 120)))#Bring the turtles back upright
@@ -153,23 +154,23 @@ def InitClockArms():
     TurtleQueues[0].append("D")
     TurtleQueues[0].append("R"+str(HourAngle))
     TurtleQueues[0].append("* Init Clock arms hour")
-    TurtleQueues[0].append("F150")
+    TurtleQueues[0].append("F" + str(Radius/2))
     TurtleQueues[0].append("U")
-    TurtleQueues[0].append("F100")
+    TurtleQueues[0].append("F" + str(Radius/3))
     TurtleQueues[0].append("R180")
     MinuteAngle = 360/60*Minute
     TurtleQueues[1].append("S3")
     TurtleQueues[1].append("D")
     TurtleQueues[1].append("R"+str(MinuteAngle))
     TurtleQueues[1].append("* Init Clock arms minute")
-    TurtleQueues[1].append("F250")
+    TurtleQueues[1].append("F" + str(Radius/6*5))
     TurtleQueues[1].append("R180")
     SecondAngle = 360/60*Second
     TurtleQueues[2].append("C#FF0000")
     TurtleQueues[2].append("D")
     TurtleQueues[2].append("R"+str(SecondAngle))
     TurtleQueues[2].append("* Init Clock arms second")
-    TurtleQueues[2].append("F250")
+    TurtleQueues[2].append("F" + str(Radius/6*5))
     TurtleQueues[2].append("R180")
     ReadTurtleQueues(25)
 
@@ -238,15 +239,15 @@ def RefreshClock():
         TurtleQueues[0].append("S7")
         TurtleQueues[0].append("D")
         TurtleQueues[0].append("c#FFFFFF")
-        TurtleQueues[0].append("F250")
+        TurtleQueues[0].append("F" + str(Radius/6*5))
         TurtleQueues[0].append("R180")
         TurtleQueues[0].append("S5")
         TurtleQueues[0].append("C#000000")
         TurtleQueues[0].append("R"+str(HourAngle - OldHourAngle))
         TurtleQueues[0].append("* From refreshing hour")
-        TurtleQueues[0].append("F150")
+        TurtleQueues[0].append("F" + str(Radius/2))
         TurtleQueues[0].append("U")
-        TurtleQueues[0].append("F100")
+        TurtleQueues[0].append("F" + str(Radius/3))
         TurtleQueues[0].append("R180")
         OldHour = Hour
     else:
@@ -257,13 +258,13 @@ def RefreshClock():
         MinuteAngle = 360/60*Minute
         TurtleQueues[1].append("S5")
         TurtleQueues[1].append("c#FFFFFF")
-        TurtleQueues[1].append("F250")
+        TurtleQueues[1].append("F" + str(Radius/6*5))
         TurtleQueues[1].append("R180")
         TurtleQueues[1].append("S3")
         TurtleQueues[1].append("C#000000")
         TurtleQueues[1].append("R"+str(MinuteAngle - OldMinuteAngle))
         TurtleQueues[1].append("* From refreshing minute")
-        TurtleQueues[1].append("F250")
+        TurtleQueues[1].append("F" + str(Radius/6*5))
         TurtleQueues[1].append("R180")
         OldMinute = Minute
     else:
@@ -274,13 +275,13 @@ def RefreshClock():
         SecondAngle = 360/60*Second
         TurtleQueues[2].append("S3")
         TurtleQueues[2].append("c#FFFFFF")
-        TurtleQueues[2].append("F250")
+        TurtleQueues[2].append("F" + str(Radius/6*5))
         TurtleQueues[2].append("R180")
         TurtleQueues[2].append("S1")
         TurtleQueues[2].append("C#FF0000")
         TurtleQueues[2].append("R"+str(SecondAngle - OldSecondAngle))
         TurtleQueues[2].append("* From refreshing second")
-        TurtleQueues[2].append("F250")
+        TurtleQueues[2].append("F" + str(Radius/6*5))
         TurtleQueues[2].append("R180")
         OldSecond = Second
     else:
@@ -288,9 +289,19 @@ def RefreshClock():
         
     ReadTurtleQueues(30)
     
+WindowSize = (0, 0)
+Radius = min(turtle.window_width(), turtle.window_height()) * 0.8 / 2
+
 InitClock()
 turtle.delay(10)
 while True:
+    if WindowSize != (turtle.window_width(), turtle.window_height()):
+        WindowSize = (turtle.window_width(), turtle.window_height())
+        Radius = min(turtle.window_width(), turtle.window_height()) * 0.8 / 2
+        turtle.delay(0)
+        InitClock()
+        turtle.delay(10)
+
     CurrentTime = time.localtime()
     Hour = CurrentTime[3]
     Minute = CurrentTime[4]
