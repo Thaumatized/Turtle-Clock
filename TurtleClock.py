@@ -40,6 +40,7 @@ SecondAngle = 0
 # c = pencolor => changes the color the turtle draws and the outline of the turtle
 # C = color => changes the color the turtle draws and the *ENTIRE* turtle's color
 # S = pensize
+# Z = undo, value is interpreted in the same way as for movements, so supplying the same value should undo the same amount.
 # * = Sync => waits until all turtles have a * instruction. Value can be used as a debug comment to know where a sync instruction came in case of freezes. I used this by halting the program with ctrl+c and then lookign at the variables with thonny to see which one had a * left and where it was form.
 #
 # To draw with all the turtles simultaneously, fill up their queues by appending and then call ReadTurtleQueues
@@ -66,7 +67,7 @@ def ReadTurtleQueues(MaxStep = 5):
                 else:
                         TurtleQueues[i].pop(0)
                 
-                # I know this is just the sort of place where you could use match; However since this is python it really doesn't matter. In other languages I would do it just for cleanliness, but for python I am totally ready to spend more time writing a comment which is frankly useless about than actually do it.
+                # I know this is just the sort of place where you could use match; However since this is python it really doesn't matter. In other languages I would do it just for cleanliness, but for python I am totally ready to spend more time writing a comment which is frankly useless about it than actually do it.
                 if(Action == "F"):
                     Turtles[i].forward(Amount)
                 elif(Action == "R"):
@@ -83,6 +84,8 @@ def ReadTurtleQueues(MaxStep = 5):
                     Turtles[i].color(Amount)
                 elif(Action == "S"):
                     Turtles[i].pensize(float(Amount))
+                elif(Action == "Z"):
+                    Turtles[i].undo()
                 elif(Action == "*"):
                     continue
                     # * = Syncpoint. Wait until every turtle has one.
@@ -157,22 +160,19 @@ def InitClockArms():
     TurtleQueues[0].append("F" + str(Radius/2))
     TurtleQueues[0].append("U")
     TurtleQueues[0].append("F" + str(Radius/3))
-    TurtleQueues[0].append("R180")
     MinuteAngle = 360/60*Minute
     TurtleQueues[1].append("S3")
     TurtleQueues[1].append("D")
     TurtleQueues[1].append("R"+str(MinuteAngle))
     TurtleQueues[1].append("* Init Clock arms minute")
     TurtleQueues[1].append("F" + str(Radius/6*5))
-    TurtleQueues[1].append("R180")
     SecondAngle = 360/60*Second
     TurtleQueues[2].append("C#FF0000")
     TurtleQueues[2].append("D")
     TurtleQueues[2].append("R"+str(SecondAngle))
     TurtleQueues[2].append("* Init Clock arms second")
     TurtleQueues[2].append("F" + str(Radius/6*5))
-    TurtleQueues[2].append("R180")
-    ReadTurtleQueues(25)
+    ReadTurtleQueues(30)
 
 def SyncedHome():
     #NOTE turtle angle is in a counter clockwise direction
@@ -236,11 +236,11 @@ def RefreshClock():
     if RefreshHour:
         OldHourAngle = HourAngle
         HourAngle = 360/12*(Hour%12)
-        TurtleQueues[0].append("S7")
-        TurtleQueues[0].append("D")
-        TurtleQueues[0].append("c#FFFFFF")
-        TurtleQueues[0].append("F" + str(Radius/6*5))
-        TurtleQueues[0].append("R180")
+        #These come in two because the steps need to match the drawing of the hand in order to not slowly drift out of sync.
+        TurtleQueues[0].append("Z"+ str(Radius/2))
+        TurtleQueues[0].append("Z") # This undoes the lifting of the pen.
+        TurtleQueues[0].append("Z" + str(Radius/3))
+
         TurtleQueues[0].append("S5")
         TurtleQueues[0].append("C#000000")
         TurtleQueues[0].append("R"+str(HourAngle - OldHourAngle))
@@ -248,7 +248,7 @@ def RefreshClock():
         TurtleQueues[0].append("F" + str(Radius/2))
         TurtleQueues[0].append("U")
         TurtleQueues[0].append("F" + str(Radius/3))
-        TurtleQueues[0].append("R180")
+
         OldHour = Hour
     else:
         TurtleQueues[0].append("* From not refreshing hour")
@@ -256,16 +256,14 @@ def RefreshClock():
     if RefreshMinute:
         OldMinuteAngle = MinuteAngle
         MinuteAngle = 360/60*Minute
-        TurtleQueues[1].append("S5")
-        TurtleQueues[1].append("c#FFFFFF")
-        TurtleQueues[1].append("F" + str(Radius/6*5))
-        TurtleQueues[1].append("R180")
+        TurtleQueues[1].append("Z" + str(Radius/6*5))
+
         TurtleQueues[1].append("S3")
         TurtleQueues[1].append("C#000000")
         TurtleQueues[1].append("R"+str(MinuteAngle - OldMinuteAngle))
         TurtleQueues[1].append("* From refreshing minute")
         TurtleQueues[1].append("F" + str(Radius/6*5))
-        TurtleQueues[1].append("R180")
+
         OldMinute = Minute
     else:
         TurtleQueues[1].append("* From not refreshing minute")
@@ -273,16 +271,14 @@ def RefreshClock():
     if RefreshSecond:
         OldSecondAngle = SecondAngle
         SecondAngle = 360/60*Second
-        TurtleQueues[2].append("S3")
-        TurtleQueues[2].append("c#FFFFFF")
-        TurtleQueues[2].append("F" + str(Radius/6*5))
-        TurtleQueues[2].append("R180")
+        TurtleQueues[2].append("Z" + str(Radius/6*5))
+
         TurtleQueues[2].append("S1")
         TurtleQueues[2].append("C#FF0000")
         TurtleQueues[2].append("R"+str(SecondAngle - OldSecondAngle))
         TurtleQueues[2].append("* From refreshing second")
         TurtleQueues[2].append("F" + str(Radius/6*5))
-        TurtleQueues[2].append("R180")
+
         OldSecond = Second
     else:
         TurtleQueues[2].append("* From not refreshing second")
@@ -311,14 +307,4 @@ while True:
     Minute = CurrentTime[4]
     Second = CurrentTime[5]
     
-    # When the minute arm turns to these numbers, redraw the clock because turtle gets laggy otherwise.
-    # I suspect that turtle keeps information about old lines.
-    RefreshMinutes = range(0, 60, 5); #Every 5 minutes
-    
-    if Minute != OldMinute and Minute in RefreshMinutes:
-        turtle.delay(0)
-        InitClock()
-        turtle.delay(10)
-    
     RefreshClock()
-
