@@ -4,4 +4,4 @@ Back when working for SSKKY, we had the students do an exercise where they had t
   
 Now that I gained control of multiple turtles at the same time, An analog clock seemed like the smartest thing I could do with it.  
 
-Right now, something hogs up memory. I think it is Turtle keeping data of lines which have been drawn over. As a tempoary solutions, which has been in use for like two years now, the clock gets redrawn every 5 minutes.
+Turtle uses memory for lines even if they are drawn over, so this is something to look for if you implement something with this code. Undoing will free the memory up, which what the clock uses too.
