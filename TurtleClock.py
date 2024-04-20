@@ -222,16 +222,6 @@ def RefreshClock():
     RefreshHour = OldHour != Hour
     RefreshMinute = OldMinute != Minute
     RefreshSecond = OldSecond != Second
-    
-    if((RefreshHour or RefreshMinute) and HourAngle == MinuteAngle):
-        RefreshHour = True
-        RefreshMinute = True
-    if((RefreshHour or RefreshSecond) and HourAngle == SecondAngle):
-        RefreshHour = True
-        RefreshSecond = True
-    if((RefreshSecond or RefreshMinute) and SecondAngle == MinuteAngle):
-        RefreshSecond = True
-        RefreshMinute = True
         
     if RefreshHour:
         OldHourAngle = HourAngle
