@@ -1,6 +1,7 @@
 import turtle
 import time
 import math
+import sys
 
 Turtles = []
 TurtleQueues = []
@@ -277,6 +278,9 @@ def RefreshClock():
     
 WindowSize = (turtle.window_width(), turtle.window_height())
 Radius = min(turtle.window_width(), turtle.window_height()) * 0.8 / 2
+
+if("-f" in sys.argv):
+    turtle.delay(0)
 
 InitClock()
 turtle.delay(10)

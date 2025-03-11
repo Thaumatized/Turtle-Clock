@@ -5,3 +5,6 @@ Back when working for SSKKY, we had the students do an exercise where they had t
 Now that I gained control of multiple turtles at the same time, An analog clock seemed like the smartest thing I could do with it.  
 
 Turtle uses memory for lines even if they are drawn over, so this is something to look for if you implement something with this code. Undoing will free the memory up, which what the clock uses too.
+
+use `-f` with the command to make the initial clock drawing faster.
+> python3 TurtleClock.py -f
