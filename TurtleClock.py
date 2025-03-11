@@ -67,7 +67,7 @@ def ReadTurtleQueues(MaxStep = 5):
                 else:
                         TurtleQueues[i].pop(0)
                 
-                # I know this is just the sort of place where you could use match; However since this is python it really doesn't matter. In other languages I would do it just for cleanliness, but for python I am totally ready to spend more time writing a comment which is frankly useless about it than actually do it.
+                # I know this is just the sort of place where you could use match; However since this is python it really doesn't matter. In other languages I would do it just for cleanliness, but for python I am totally ready to spend more time writing a comment which is frankly useless about it instead of actually doing it.
                 if(Action == "F"):
                     Turtles[i].forward(Amount)
                 elif(Action == "R"):
