@@ -290,8 +290,11 @@ while True:
 
     CurrentTime = time.localtime()
     if Second == CurrentTime[5]:
-        time.sleep(time.time() - int(time.time()))
-        CurrentTime = time.localtime()
+        # (1 (time.time() - int(time.time()))) would get us exactly to the next second,
+        # except in practice there seem to seems to be too much variation in the delay
+        # => 0.1 won't skip seconds or refresh immiditealy after the first update is done.
+        time.sleep(0.1)
+        continue
 
     Hour = CurrentTime[3]
     Minute = CurrentTime[4]
