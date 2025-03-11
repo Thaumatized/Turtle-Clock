@@ -275,7 +275,7 @@ def RefreshClock():
         
     ReadTurtleQueues(30)
     
-WindowSize = (0, 0)
+WindowSize = (turtle.window_width(), turtle.window_height())
 Radius = min(turtle.window_width(), turtle.window_height()) * 0.8 / 2
 
 InitClock()
